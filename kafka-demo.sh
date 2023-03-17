@@ -75,3 +75,84 @@ EOF
 
 
 
+#########################################################################################################
+# 额外测试：通过WordCount的kafaka streams程序，读取 SethTestTopicA(生产端Topic) 中输入的词汇，做WordCount统计，然后输出到 WordCountOutput(消费端Topic)
+
+# 生产端 （SethTestTopicA）
+kafka-console-producer --broker-list localhost:9092 --topic SethTestTopicA
+
+# 消费端（WordCountOutput）
+kafka-console-consumer --bootstrap-server localhost:9092 --topic WordCountOutput --from-beginning --property print.key=true --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+
+# 生产端 (SethTestTopicA) --> 消费端（WordCountOutput）转换的 Kafka Streams 程序（统计字符数）
+<< EOF
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.*;
+
+import java.util.Arrays;
+import java.util.Properties;
+
+public class KafkaStreamsDemo {
+
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "word-count");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+
+        StreamsBuilder builder = new StreamsBuilder();
+        KStream<String, String> source = builder.stream("SethTestTopicA");
+        source.foreach((key, value) ->
+                System.out.println("input: key=" + key + ", value=" + value)
+        );
+
+        KTable<String, Long> counts = source
+                .flatMapValues(value ->
+                        Arrays.asList(value.toLowerCase().split("\\W+"))
+                )
+                .groupBy((key, value) ->
+                        value
+                )
+                .count(
+                        Materialized.as("word-counts")
+                );
+        counts.toStream().foreach((key, value) ->
+                System.out.println("output: key=" + key + ", value=" + value)
+        );
+        counts.toStream().to("WordCountOutput", Produced.with(Serdes.String(), Serdes.Long()));
+
+        KafkaStreams streams = new KafkaStreams(builder.build(), props);
+        streams.start();
+    }
+}
+EOF
+
+# 在生产端输入
+<<EOF
+>ddd eee zzz
+>hello my kafka
+>ddd eee
+EOF
+
+# 则会看到在消费端输出（中间等待了很久，在我的mac上，大概20秒后，才输出）
+<<EOF
+ddd	8
+eee	2
+zzz	4
+hello	6
+my	2
+kafka	1
+ddd	9
+eee	3
+EOF
+
+
+
+
+
+
+
