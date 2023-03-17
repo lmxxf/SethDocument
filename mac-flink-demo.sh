@@ -28,7 +28,7 @@ EOF
 ./libexec/bin/start-cluster.sh
 # 程序首次启动，mac会弹出防火墙提示，选择允许即可
 
-# 停止flink
+# 停止flink（仅做记录，暂时先不要执行stop）
 ./libexec/bin/stop-cluster.sh
 
 # 打开页面 http://localhost:8081/ 可以看到flink管理台
@@ -83,6 +83,14 @@ WARNING: All illegal access operations will be denied in a future release
 (hahaha,1)
 EOF
 
+# 查看 localhost:8081，会看到当前一直存在一个”Running Jobs“
+
+# 这时候，如果用Ctrl+C强制结束 ”nc窗口“，则切换回”flink run窗口“时会看到：”flink run窗口“中的程序也结束了
+# 此时查看 localhost:8081，则会看到已经没有了"Running Jobs"，而是多了一个"Completed Jobs"
+# 当前命令行应该是停留在”flink run窗口“，且flink run程序已结束，实验完毕，可以停止flink服务了
+./libexec/bin/stop-cluster.sh
+
+# flink服务停止，实验结束
 
 
 
