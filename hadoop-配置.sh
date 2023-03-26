@@ -244,32 +244,40 @@ bin/yarn-session.sh -nm test
 
 
 # 最后查看 master/slave1/slave2 上的java进程
+# 更多解释：https://lvxueyang.vip/post/286e9c8d.html
+
+# hdfs: 主NameNode - 从DataNode（主备SecondaryNameNode）
+# Yarn资源: 主ResourceManager - 从NodeManager
+# Yarn调度: YarnSessionClusterEntrypoint - YarnTaskExecutorRunner
+# Flink: FlinkYarnSessionCli
+
+
 # @master jps
 <<EOF
+3599 NameNode
 3801 DataNode
 5979 NodeManager
-10973 Jps
-10366 FlinkYarnSessionCli
-3599 NameNode
 10783 YarnTaskExecutorRunner
+10366 FlinkYarnSessionCli
+10973 Jps
 EOF
 
 # @Slave1 jps
 <<EOF
-5354 Jps
-2907 NodeManager
-2172 ResourceManager
-5038 YarnSessionClusterEntrypoint
 1823 DataNode
+2172 ResourceManager
+2907 NodeManager
+5038 YarnSessionClusterEntrypoint
+5354 Jps
 EOF
 
 # @Slave2 jps
 <<EOF
+1900 DataNode
+2255 NodeManager
 2006 SecondaryNameNode
 13896 YarnTaskExecutorRunner
-1900 DataNode
 14045 Jps
-2255 NodeManager
 EOF
 
 

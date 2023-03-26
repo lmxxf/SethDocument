@@ -24,7 +24,7 @@ brew install maven
 mvn clean package
 
 
-# 配置dockerfile
+# 配置Dockerfile
 << EOF
 FROM openjdk:11
 ADD spring-dao-lession-61-1.0-SNAPSHOT.jar /docker-test.jar
