@@ -227,9 +227,9 @@ cd flink-1.15.4-yarn
 
 vi conf/flink-conf.yaml
 <<EOF
-jobmanager.memory.process.size: 1600m
-taskmanager.memory.process.size: 1728m
-taskmanager.numberOfTaskSlots: 8
+jobmanager.memory.process.size: 1024m
+taskmanager.memory.process.size: 2048m
+taskmanager.numberOfTaskSlots: 2
 parallelism.default: 1
 EOF
 
