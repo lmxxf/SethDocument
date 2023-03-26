@@ -1,3 +1,8 @@
+# 参考文章 
+# https://blog.csdn.net/weixin_47491957/article/details/124239566
+# https://juejin.cn/post/7067827047921352741
+
+
 # 登录到 master/slave1/slave2
 # 全都关闭防火墙
 systemctl stop firewalld
@@ -16,7 +21,7 @@ mkdir -p /opt/module
 cd /opt/module
 
 # 可以使用代理服务器
-export https_proxy=http://SethDeMacbook2023:7890 http_proxy=http://SethDeMacbook2023:7890 all_proxy=socks5://SethDeMacbook2023:7890
+# export https_proxy=http://SethDeMacbook2023:7890 http_proxy=http://SethDeMacbook2023:7890 all_proxy=socks5://SethDeMacbook2023:7890
 
 wget https://archive.apache.org/dist/hadoop/common/hadoop-3.1.3/hadoop-3.1.3.tar.gz
 tar -zxvf hadoop-3.1.3.tar.gz -C /opt/module/
@@ -28,7 +33,7 @@ scp hadoop-3.1.3.tar.gz root@slave2:/opt/module
 
 
 # 登录到 master
-vim /root/.bash_profile
+vi /root/.bash_profile
 # 加入脚本
 <<EOF
 export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.362.b08-1.el7_9.x86_64"
@@ -203,12 +208,39 @@ sbin/start-yarn.sh
 
 # 检查 hdfs 和 yarn 是否正常
 # hdfs为 http://master:8020
+# slave1:9866 (192.168.31.183:9866)	http://slave1:9864	0s	6m	49.98 GB 0	8 KB (0%)	3.1.3
+# slave2:9866 (192.168.31.118:9866)	http://slave2:9864	0s	0m	49.98 GB 0	8 KB (0%)	3.1.3
+
 # yarn为 http://slave1::8088
+# /default-rack	RUNNING	slave2:40383	slave2:8042	Sun Mar 26 19:17:24 +0800 2023		0		0 B	4 GB	0	8	3.1.3
+# /default-rack	RUNNING	master:41650	master:8042	Sun Mar 26 19:16:43 +0800 2023		0		0 B	4 GB	0	8	3.1.3
+# /default-rack	RUNNING	slave1:46747	slave1:8042	Sun Mar 26 19:17:01 +0800 2023		0		0 B	4 GB	0	8	3.1.3
 
 
 
+# 开始配置 flink（仅在 master 上执行）
+cd /opt/module
+wget https://dlcdn.apache.org/flink/flink-1.15.4/flink-1.15.4-bin-scala_2.12.tgz
+tar zxvf flink-1.15.4-bin-scala_2.12.tgz
+mv flink-1.15.4 flink-1.15.4-yarn
+cd flink-1.15.4-yarn
 
+vi conf/flink-conf.yaml
+<<EOF
+jobmanager.memory.process.size: 1600m
+taskmanager.memory.process.size: 1728m
+taskmanager.numberOfTaskSlots: 8
+parallelism.default: 1
+EOF
 
+vi conf/workers
+<<EOF
+master
+slave1
+slave2
+EOF
+
+bin/yarn-session.sh -nm test
 
 
 
