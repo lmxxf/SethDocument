@@ -243,7 +243,34 @@ EOF
 bin/yarn-session.sh -nm test
 
 
+# 最后查看 master/slave1/slave2 上的java进程
+# @master jps
+<<EOF
+3801 DataNode
+5979 NodeManager
+10973 Jps
+10366 FlinkYarnSessionCli
+3599 NameNode
+10783 YarnTaskExecutorRunner
+EOF
 
+# @Slave1 jps
+<<EOF
+5354 Jps
+2907 NodeManager
+2172 ResourceManager
+5038 YarnSessionClusterEntrypoint
+1823 DataNode
+EOF
+
+# @Slave2 jps
+<<EOF
+2006 SecondaryNameNode
+13896 YarnTaskExecutorRunner
+1900 DataNode
+14045 Jps
+2255 NodeManager
+EOF
 
 
 
