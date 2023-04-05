@@ -26,6 +26,16 @@ sudo vi /etc/fstab
 # UUID=5AF011B2F011957B /home/lmxxf/DiskD ntfs defaults 0 0
 sudo mount -a
 
+# 安装conda，先下载
+bash Anaconda3-2023.03-Linux-x86_64.sh
+conda create --name tensorflow-nvidia python=3.8
+conda activate tensorflow-nvidia
+
+pip install nvidia-pyindex
+pip install nvidia-tensorflow[horovod]
+
+
+
 
 # 安装python3.8
 # https://www.linuxcapable.com/install-python-3-8-on-ubuntu-linux/
