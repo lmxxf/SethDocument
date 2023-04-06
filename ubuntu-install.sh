@@ -31,6 +31,8 @@ bash Anaconda3-2023.03-Linux-x86_64.sh
 conda create --name tensorflow-nvidia python=3.8
 conda activate tensorflow-nvidia
 
+conda info --env
+
 pip install nvidia-pyindex
 pip install nvidia-tensorflow[horovod]
 
@@ -71,6 +73,11 @@ sudo apt install make
 
 ubuntu-drivers devices
 sudo apt install nvidia-driver-525-open
+
+# 命令行下代理服务器
+export http_proxy=http://127.0.0.1:7890
+export https_proxy=http://127.0.0.1:7890
+
 
 # 安装cuda 11.8
 # https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux
