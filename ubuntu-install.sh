@@ -38,6 +38,51 @@ pip install nvidia-tensorflow[horovod]
 
 
 
+# 安装cuda（当前装的是 NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0 ）
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/12.0.1/local_installers/cuda-repo-ubuntu2204-12-0-local_12.0.1-525.85.12-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu2204-12-0-local_12.0.1-525.85.12-1_amd64.deb
+sudo cp /var/cuda-repo-ubuntu2204-12-0-local/cuda-*-keyring.gpg /usr/share/keyrings/
+sudo apt-get update
+sudo apt-get -y install cuda
+
+# 添加到~/.bashrc
+export PATH=/usr/local/cuda-12.0/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.0/lib64
+
+# 测试cuda
+git clone https://github.com/NVIDIA/cuda-samples
+cd cuda-samples/Samples/1_Utilities/deviceQuery
+make
+
+# 下载cudnn-linux-x86_64-8.5.0.96_cuda11
+# 假设：查阅cuDNN下载网站，可以知道，如果目前电脑中安装了CUDA Toolkit=10.1（也就是CUDA10.1），那么cuDNN的可选版本有7.6.4、7.6.3、7.6.2
+wget https://developer.download.nvidia.com/compute/cudnn/secure/8.8.1/local_installers/12.0/cudnn-local-repo-ubuntu2204-8.8.1.3_1.0-1_amd64.deb
+
+sudo cp /var/cudnn-local-repo-ubuntu2204-8.8.1.3/cudnn-local-DB35EEEE-keyring.gpg /usr/share/keyrings/
+sudo apt install ./cudnn-local-repo-ubuntu2204-8.8.1.3_1.0-1_amd64.deb
+
+
+# tar -xvf cudnn-linux-x86_64-8.5.0.96_cuda11-archive.tar.xz
+# cd cudnn-linux-x86_64-8.5.0.96_cuda11-archive/
+
+# sudo cp include/* /usr/local/cuda/include
+# sudo cp lib/libcudnn* /usr/local/cuda/lib64
+# sudo chmod a+r /usr/local/cuda/include/cudnn*
+# sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
+# cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
+
+# 測試cudnn
+git clone https://github.com/li-weihua/cudnn_samples_v8 
+cd cudnn_samples_v8/mnistCUDNN
+make clean && make
+# CUDA 12.x has dropped support for Kepler compute 3.x devices. The minimum supported compute capability is 5.0 in CUDA 12.
+# https://forums.developer.nvidia.com/t/nvcc-fatal-unsupported-gpu-architecture-compute-35/247815
+
+
+
+
 
 # 安装python3.8
 # https://www.linuxcapable.com/install-python-3-8-on-ubuntu-linux/
