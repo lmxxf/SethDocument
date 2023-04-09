@@ -1,5 +1,6 @@
 # ubuntu下安装chrome
 # https://zhuanlan.zhihu.com/p/137114100
+# 星火应用商店 https://www.spark-app.store/
 # 下载
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 # 安装
