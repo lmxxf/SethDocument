@@ -26,6 +26,18 @@ EOF
 SELECT id, name, age + 1 as age_plus_one FROM input;
 EOF
 
+# 或其它语句
+<<EOF
+SELECT id, name, age
+FROM input
+WHERE age > 25;
+EOF
+<<EOF
+SELECT age, COUNT(*) as person_count
+FROM input
+GROUP BY age;
+EOF
+
 
 # csv文件
 # 路径为: /Users/yanyanjin/Study/FlinkStudy/FlinkQuickstartDemo1/src/main/resources/input.csv
