@@ -47,6 +47,8 @@ pip install nvidia-tensorflow[horovod]
 conda deactivate tensorflow-nvidia
 # 删除conda某个虚拟环境
 conda remove tensorflow-nvidia
+# 或者（不知道为什么时灵时不灵）
+conda remove --name tensorflow-nvidia --all
 
 
 
