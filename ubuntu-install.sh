@@ -9,9 +9,15 @@ sudo apt install ./google-chrome-stable_current_amd64.deb
 # 安装git
 # https://zhuanlan.zhihu.com/p/41351705
 
-# aria2下载工具
+# 安装aria2下载工具
 # https://blog.csdn.net/ChaoFeiLi/article/details/109351922
 sudo apt-get install aria2
+# 用aria2下载 
+# -x指每个下载任务的每服务器最大下载连接数，默认1，最多15
+# -s指每个下载任务的最大连接数，默认5，-s受限流于-x，同样连接数大于5时-x也受限于-s
+# -j指同时最大下载任务数，默认5
+aria2c -x 15 -s 2 http://xxxxx/xxxx.zip
+
 
 # 挂载ntfs硬盘
 # https://www.cnblogs.com/wx2020/p/16083742.html
@@ -36,6 +42,11 @@ conda info --env
 
 pip install nvidia-pyindex
 pip install nvidia-tensorflow[horovod]
+
+# 退出conda某个虚拟环境
+conda deactivate tensorflow-nvidia
+# 删除conda某个虚拟环境
+conda remove tensorflow-nvidia
 
 
 
