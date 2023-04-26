@@ -17,6 +17,8 @@ conda remove tensorflow-nvidia
 conda remove --name tensorflow-nvidia --all
 
 
+#############################################################################
+
 # 安装jupyter虚拟环境
 # conda install jupyter notebook
 conda create --name jupyter-notebook
@@ -29,3 +31,18 @@ pip3 install transformers
 # 运行
 jupyter notebook 
 # 会自动启动浏览器
+
+# 设置密码（不设置不行）
+jupyter notebook password
+
+
+# 生成jupyter配置文件（默认为~/.jupyter/jupyter_notebook_config.py）
+jupyter notebook --generate-config
+# 修改文件以允许其它主机访问 ~/.jupyter/jupyter_notebook_config.py
+<<EOF
+c.NotebookApp.ip = '0.0.0.0'
+c.NotebookApp.port = 8888
+EOF
+# 配置文件路径通过这条命令获取
+jupyter --config-dir
+
