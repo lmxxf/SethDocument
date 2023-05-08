@@ -186,7 +186,7 @@ slave1
 slave2
 EOF
 
-# 两个文件都改
+# 两个文件都改(最后确保在master上必须改过)
 vi /opt/module/hadoop-3.1.3/sbin/start-dfs.sh
 vi /opt/module/hadoop-3.1.3/sbin/stop-dfs.sh
 
@@ -197,7 +197,7 @@ HDFS_NAMENODE_USER=root
 HDFS_SECONDARYNAMENODE_USER=root
 EOF
 
-# 两个文件都改
+# 两个文件都改(最后确保在slave1上必须改)
 vi /opt/module/hadoop-3.1.3/sbin/start-yarn.sh
 vi /opt/module/hadoop-3.1.3/sbin/stop-yarn.sh
 
