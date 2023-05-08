@@ -2,6 +2,33 @@
 # https://blog.csdn.net/weixin_47491957/article/details/124239566
 # https://juejin.cn/post/7067827047921352741
 
+# 基于centos安装
+# 安装epel-release
+yum install -y epel-release
+# 基本工具
+yum install -y net-tools
+yum install -y vim
+# 编辑普通用户使用root的权限
+vim /etc/sudoers
+# 安装java环境
+# rpm -qa  | grep -i java | xargs -n1 rpm -e --nodeps
+# https://segmentfault.com/a/1190000039693252
+yum install -y java-1.8.0-openjdk
+java -version
+find / -name 'java'
+
+# 在已配置好的机器上直接clone三台主机
+# 修改主机名和ip地址
+# 主机名（master+slave1+slave2)
+vi /etc/hostname
+# 配置ip地址（可选）
+vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+<<EOF
+BOOTPROTO="static"
+IPADDR=192.168.10.100
+GATEWAY=192.168.10.2
+DNS1=192.168.10.2
+EOF
 
 # 登录到 master/slave1/slave2
 # 全都关闭防火墙
